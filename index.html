@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="library.js" defer></script>
+    <title>Library</title>
+</head>
+<body> 
+    <main class="library">
+        <div class="heading-container">
+            <h1>Library</h1>
+        </div>
+        <div class="content-wrapper row">
+            <div class="new-book-form-container row">
+                <div class="new-book-btn-container">
+                    <button class="new-book-btn">New Book</button>
+                </div>
+                <form id="new-book-form">
+                    <input id="title" type="text" placeholder="Title">
+                    <input id="author" type="text" placeholder="Author">
+                    <input id="pages" type="text" placeholder="Pages">
+                    <label for="read" type="label">Read</label>
+                    <input id="read" type="checkbox">
+                    <button id="close-form-btn" type="button">Close</button>
+                    <button id="add-book-btn" type="button">Add</button>
+                </form>
+            </div>
+            <table id="table">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Pages</th>
+                    <th>Read</th>
+                </tr>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
