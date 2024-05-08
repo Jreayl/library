@@ -1,6 +1,6 @@
-export class Book {
+class Book {
   constructor(title, author, pages, isRead, tags) {
-    this.id = generateUniqueID();
+    this.id = this.convertIDToUniqueString(Date.now() + Math.random());
     this.title = title;
     this.author = author;
     this.pages = pages;
@@ -8,11 +8,32 @@ export class Book {
     this.tags = tags;
   }
 
-  generateUniqueID() {
-    return Date.now() + Math.random();
+  convertIDToUniqueString(num) {
+    return num.toString().replace(".", "");
   }
 
   getID() {
+    console.log(this.id);
     return this.id;
+  }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getAuthor() {
+    return this.author;
+  }
+
+  getPages() {
+    return this.pages;
+  }
+
+  getIsRead() {
+    return this.isRead;
+  }
+
+  getTags() {
+    return this.tags;
   }
 }
