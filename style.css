@@ -1,5 +1,23 @@
-/* :root {
-} */
+:root {
+  --ff-sans: "Open Sans", sans-serif;
+  --ff-book: "Gentium Book Plus", sans-serif;
+
+  --fs-700: 1.5rem;
+  --fs-800: 1.75rem;
+  --fs-900: 2.75rem;
+
+  --clr-sreamin-green: #4eff7f;
+  --clr-chestnut-rose: #cd5c5c;
+  --clr-bittersweet: #ff6f66;
+  --clr-donkey-brown: #a39380;
+  --clr-ebony-clay: #263541;
+  --clr-bonjour: #fafbfa;
+  --clr-blush: #bc3e64;
+  --clr-fiord: #335065;
+  --clr-wedgewood: #517fa0;
+  --clr-new-york-pink: #d98585;
+  --clr-alto: #d9d9d9;
+}
 
 * {
   box-sizing: border-box;
@@ -11,14 +29,21 @@ body {
   line-height: 1.3;
   height: 100dvh;
   font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-main {
-  border: 2px solid red;
-}
-
-header {
-  border: 2px solid blue;
+.background-img {
+  background-image: url("assets/nick-fewings-f2Bi-VBs71M-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(3px) brightness(70%);
+  position: absolute;
+  z-index: 1;
+  height: 100dvh;
+  width: 100dvw;
 }
 
 img {
@@ -26,11 +51,206 @@ img {
   width: 100%;
 }
 
-.library-manager > .search {
+.container {
+  padding-block: 2rem;
+  padding-inline: 4rem;
+}
+
+main,
+header {
+  width: 70%;
+  z-index: 10;
+}
+
+/* HEADER ELEMENTS */
+
+header {
+  flex: 0.2;
+
+  background-color: var(--clr-bonjour);
+}
+
+.library-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-column: 1 / 2;
+
+  align-items: center;
+  column-gap: 20px;
+  row-gap: 10px;
+  width: 100%;
+
+  font-family: var(--ff-book);
+}
+
+.library-header h1 {
+  color: var(--clr-fiord);
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  font-weight: 700;
+  font-size: 2.75rem;
+}
+
+.library-header span {
+  color: var(--clr-ebony-clay);
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  max-width: 70ch;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1.25rem;
+}
+
+.library-header > .search {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
   display: flex;
   align-items: center;
 }
 
+.library-header > .control {
+  grid-column: 2 /3;
+  grid-row: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.library-header > .control button {
+  background-color: var(--clr-fiord);
+  color: var(--clr-bonjour);
+  border: none;
+
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: var(--ff-sans);
+}
+
+.library-header > .control button:hover {
+  cursor: pointer;
+  background-color: var(--clr-wedgewood);
+  transition: transform 0.2s ease;
+  transform: scale(1.05);
+}
+
+.library-header > .control button:nth-child(3) {
+  background-color: var(--clr-chestnut-rose);
+}
+
+.library-header > .control button:nth-child(3):hover {
+  background-color: var(--clr-new-york-pink);
+}
+
 svg {
   width: 1.5rem;
+  color: var(--clr-fiord);
 }
+
+input {
+  border: none;
+  border-bottom: 2px solid var(--clr-alto);
+  background-color: var(--clr-bonjour);
+  color: var(--clr-blush);
+  flex: 1;
+  padding: 5px;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+/* MAIN ELEMENTS */
+
+main {
+  flex: 0.8;
+
+  background-color: var(--clr-fiord);
+}
+
+.modal {
+  /* display: none;  */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: var(--clr-bonjour);
+}
+
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 30px;
+  padding-top: 4rem;
+}
+
+.book {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: 1fr 1fr 4fr;
+  row-gap: 10px;
+
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 10px solid var(--clr-blush);
+  border-right: 2px solid var(--clr-bonjour);
+  background-color: var(--clr-donkey-brown);
+  color: var(--clr-bonjour);
+}
+
+.book-title {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+
+  font-size: var(--fs-700);
+  font-weight: 700;
+}
+
+.book-author {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+
+  font-size: var(--fs--600);
+  font-weight: 500;
+}
+
+.book-pages {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+
+  font-size: var(--fs--600);
+  font-weight: 600;
+
+  align-self: end;
+}
+
+.book-read {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+  align-self: end;
+
+  display: flex;
+
+  align-items: end;
+  justify-content: flex-end;
+}
+
+.book-read > * {
+  /* font-size: var(--fs--600); */
+  align-self: end;
+  justify-self: end;
+
+  fill: var(--clr-bittersweet);
+}
+
+.book-read .isRead {
+  fill: var(--clr-sreamin-green);
+}
+
+/* ANIMATIONS */
