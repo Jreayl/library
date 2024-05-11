@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
     <script src="book.js" defer></script>
     <script src="library.js" defer></script>
     <script src="script.js" defer></script>
@@ -12,14 +24,14 @@
   <body>
     <div class="background-img"></div>
     <header>
-      <div class="library-header">
-        <h1>Library</h1>
+      <div class="library-header container">
+        <h1>Little Library</h1>
         <span>
           "In the case of good books, the point is not to see how many of them
           you can get through, but rather how many can get through to you.”
+          <br />
+          - Mortimer J Alder
         </span>
-      </div>
-      <div class="library-manager">
         <div class="search">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
@@ -30,19 +42,34 @@
         </div>
         <div class="control">
           <div>
-            <label for="sort">Sort by:</label>
-            <select name="sort" id="sort">
+            <button for="sort">Sort</button>
+            <!-- <select name="sort" id="sort">
               <option value="newest">Newest</option>
               <option value=""></option>
-            </select>
+            </select> -->
           </div>
-          <button type="button">Add</button>
-          <button type="button">Clear</button>
+          <button type="button" class="add">Add</button>
+          <button type="button" class="clear">Clear</button>
         </div>
       </div>
     </header>
     <main>
-      <div class="library-grid"></div>
+      <div class="modal">
+        <div class="modal-content">
+          <span>&times;</span>
+          <label for="">Title</label>
+          <input type="text" />
+          <label for="">Author</label>
+          <input type="text" />
+          <label for="">Pages</label>
+          <input type="number" />
+          <label for="">Tags</label>
+          <input type="text" />
+          <label for="">I've read this book</label>
+          <input type="checkbox" />
+        </div>
+      </div>
+      <div class="library-grid container"></div>
     </main>
     <footer></footer>
   </body>
