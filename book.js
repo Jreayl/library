@@ -13,7 +13,6 @@ class Book {
   }
 
   getID() {
-    console.log(this.id);
     return this.id;
   }
 
