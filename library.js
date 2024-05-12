@@ -15,4 +15,8 @@ class Library {
   getBooks() {
     return this.books;
   }
+
+  removeAllBooks() {
+    this.books = [];
+  }
 }
