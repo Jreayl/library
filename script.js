@@ -1,6 +1,15 @@
 const myLibrary = new Library();
 
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 896, true, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
 /* Header elements */
+const searchInput = document.querySelector(".search > input");
 const addBtn = document.querySelector(".add");
 const clearBtn = document.querySelector(".clear");
 
@@ -10,16 +19,18 @@ const addBookModalConfirm = document.querySelector(".modal button");
 const closeBookModal = document.querySelector(".modal-content span");
 const form = document.querySelector("form");
 
-/* Library */
+/* Main elements */
 const libraryGrid = document.querySelector(".library-grid");
 
-window.addEventListener("load", displayBooks);
+window.addEventListener("load", displayBooks(myLibrary.getBooks()));
 
 window.addEventListener("click", (event) => {
   if (event.target == addBookModal) {
     hideModal();
   }
 });
+
+searchInput.addEventListener("input", filterBooks);
 
 addBtn.addEventListener("click", showModal);
 
@@ -41,16 +52,53 @@ function clearBooks() {
   libraryGrid.innerText = "";
 }
 
-function displayBooks() {
-  myLibrary.getBooks().forEach((book) => {
+function displayBooks(books) {
+  libraryGrid.innerHTML = "";
+  books.forEach((book) => {
     libraryGrid.appendChild(createBookMarkup(book));
   });
+}
+
+function filterBooks(event) {
+  if (event.target.value === "") {
+    displayBooks(myLibrary.getBooks());
+    return;
+  }
+
+  const searchQuery = event.target.value.toLowerCase();
+  const books = [];
+
+  for (let i = 0; i < myLibrary.getBooks().length; i++) {
+    let title = myLibrary.getBooks()[i].getTitle().toLowerCase();
+    let author = myLibrary.getBooks()[i].getAuthor().toLowerCase();
+    let pages = myLibrary.getBooks()[i].getPages().toString().toLowerCase();
+    let tags = myLibrary
+      .getBooks()
+      [i].getTags()
+      .map((tag) => tag.toLowerCase());
+
+    if (
+      title.includes(searchQuery) ||
+      author.includes(searchQuery) ||
+      pages.includes(searchQuery) ||
+      tags.some((tag) => tag.includes(searchQuery))
+    ) {
+      books.push(myLibrary.getBooks()[i]);
+    }
+  }
+
+  displayBooks(books);
 }
 
 function createBookMarkup(book) {
   const element = document.createElement("div");
   element.setAttribute("class", "book");
   element.setAttribute("data-id", book.getID());
+
+  const remove = document.createElement("span");
+  remove.classList.add("book-remove");
+  remove.innerHTML = "&times;";
+  element.appendChild(remove);
 
   const title = document.createElement("span");
   title.classList.add("book-title");
@@ -69,18 +117,15 @@ function createBookMarkup(book) {
 
   const isRead = document.createElement("div");
   isRead.classList.add("book-read");
-  const svgBookmarkCheck = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <title>Read</title>
-        <path class="isRead" d="M17,3A2,2 0 0,1 19,5V21L12,18L5,21V5C5,3.89 5.9,3 7,3H17M11,14L17.25,7.76L15.84,6.34L11,11.18L8.41,8.59L7,10L11,14Z" />
-    </svg>`;
-  const svgBookmarkMinus = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <title>Not read</title>
-      <path d="M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5A2,2 0 0,0 17,3M15,11H9V9H15V11Z" />
-    </svg>`;
 
-  isRead.innerHTML = book.getIsRead() ? svgBookmarkCheck : svgBookmarkMinus;
+  const svgBookOpen = `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+    <title>You've read this book!</title>
+    <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+  </svg>`;
+
+  isRead.innerHTML = book.getIsRead() ? svgBookOpen : "";
   element.appendChild(isRead);
 
   return element;
