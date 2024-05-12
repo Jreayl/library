@@ -1,59 +1,47 @@
 const myLibrary = new Library();
 
+/* Header elements */
 const addBtn = document.querySelector(".add");
 const clearBtn = document.querySelector(".clear");
+
+/* Modal elements */
 const addBookModal = document.querySelector(".modal");
+const addBookModalConfirm = document.querySelector(".modal button");
+const closeBookModal = document.querySelector(".modal-content span");
+const form = document.querySelector("form");
+
+/* Library */
+const libraryGrid = document.querySelector(".library-grid");
 
 window.addEventListener("load", displayBooks);
-// addBtn.addEventListener("click", displayAddBookModal);
 
-myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 896, true, [
-    "SciFi",
-    "Space",
-    "Desert",
-    "Political",
-  ])
-);
+window.addEventListener("click", (event) => {
+  if (event.target == addBookModal) {
+    hideModal();
+  }
+});
 
-myLibrary.addBook(
-  new Book("Red Rising", "Pierce Brown", 416, false, [
-    "Space",
-    "SciFi",
-    "Mars",
-    "Slavery",
-  ])
-);
+addBtn.addEventListener("click", showModal);
 
-myLibrary.addBook(
-  new Book("Red Rising", "Pierce Brown", 416, false, [
-    "Space",
-    "SciFi",
-    "Mars",
-    "Slavery",
-  ])
-);
+clearBtn.addEventListener("click", () => {
+  myLibrary.removeAllBooks();
+  clearBooks();
+});
 
-myLibrary.addBook(
-  new Book("Red Rising", "Pierce Brown", 416, false, [
-    "Space",
-    "SciFi",
-    "Mars",
-    "Slavery",
-  ])
-);
+closeBookModal.addEventListener("click", hideModal);
 
-myLibrary.addBook(
-  new Book("Red Rising", "Pierce Brown", 416, false, [
-    "Space",
-    "SciFi",
-    "Mars",
-    "Slavery",
-  ])
-);
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  addBookToLibrary();
+  clearModal();
+  hideModal();
+});
+
+function clearBooks() {
+  libraryGrid.innerText = "";
+}
 
 function displayBooks() {
-  const libraryGrid = document.querySelector(".library-grid");
   myLibrary.getBooks().forEach((book) => {
     libraryGrid.appendChild(createBookMarkup(book));
   });
@@ -96,4 +84,43 @@ function createBookMarkup(book) {
   element.appendChild(isRead);
 
   return element;
+}
+
+function hideModal() {
+  addBookModal.style.display = "none";
+}
+
+function showModal() {
+  addBookModal.style.display = "block";
+}
+
+function clearModal() {
+  form.reset();
+}
+
+function addBookToLibrary() {
+  const titleInput = document.querySelector(".modal #title").value;
+  const authorInput = document.querySelector(".modal #author").value;
+  const pagesInput = document.querySelector(".modal #pages").value;
+
+  const readInput =
+    document.querySelector(".modal-radio input[name=read]:checked").id === "yes"
+      ? true
+      : false;
+
+  const tagsInput = document
+    .querySelector(".modal #tags")
+    .value.split(",")
+    .map((tag) => tag.toLowerCase());
+
+  const book = new Book(
+    titleInput,
+    authorInput,
+    pagesInput,
+    readInput,
+    tagsInput
+  );
+
+  myLibrary.addBook(book);
+  libraryGrid.appendChild(createBookMarkup(book));
 }
