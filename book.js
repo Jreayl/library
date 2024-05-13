@@ -35,4 +35,8 @@ class Book {
   getTags() {
     return this.tags;
   }
+
+  setIsRead(bool) {
+    this.isRead = bool;
+  }
 }
