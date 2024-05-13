@@ -27,14 +27,19 @@
         <span>&times;</span>
         <div class="modal-title">
           <label for="title">Title</label>
-          <input type="text" id="title" placeholder="Dune" />
+          <input type="text" id="title" placeholder="Dune" maxlength="30" />
         </div>
         <div class="modal-author">
           <label for="author">Author</label>
-          <input type="text" id="author" placeholder="Frank Herbert" />
+          <input
+            type="text"
+            id="author"
+            placeholder="Frank Herbert"
+            maxlength="30"
+          />
         </div>
         <div class="modal-tags">
-          <label for="tags">Tags</label>
+          <label for="tags">Tags (optional)</label>
           <input
             type="text"
             id="tags"
@@ -43,7 +48,13 @@
         </div>
         <div class="modal-pages-read">
           <label for="pages">Pages</label>
-          <input type="number" id="pages" placeholder="896" />
+          <input
+            type="number"
+            id="pages"
+            placeholder="896"
+            min="1"
+            max="9999"
+          />
           <label>I've read this book</label>
           <div class="modal-radio">
             <div class="radio-yes">
@@ -62,7 +73,7 @@
     <div class="background-img"></div>
     <header>
       <div class="library-header container">
-        <h1>Little Library</h1>
+        <h1>Library</h1>
         <span>
           "In the case of good books, the point is not to see how many of them
           you can get through, but rather how many can get through to you.”
@@ -78,12 +89,23 @@
           <input type="search" />
         </div>
         <div class="control">
-          <div>
-            <button for="sort">Sort</button>
-            <!-- <select name="sort" id="sort">
-              <option value="newest">Newest</option>
-              <option value=""></option>
-            </select> -->
+          <div class="dropdown">
+            <button type="button" class="sort">
+              <label>
+                Sort
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M7,10L12,15L17,10H7Z" />
+                </svg>
+              </label>
+            </button>
+            <div class="dropdown-sort hidden">
+              <div class="dropdown-item">All books</div>
+              <div class="dropdown-item">Read</div>
+              <div class="dropdown-item">Not read</div>
+              <div class="dropdown-item">Most pages</div>
+              <div class="dropdown-item">Least pages</div>
+              <div class="dropdown-item">Recently added</div>
+            </div>
           </div>
           <button type="button" class="add">Add</button>
           <button type="button" class="clear">Clear</button>
