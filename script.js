@@ -1,4 +1,6 @@
 const myLibrary = new Library();
+const myLibrarySorted = new Library();
+const myLibraryFiltered = new Library();
 
 myLibrary.addBook(
   new Book("Dune", "Frank Herbert", 896, true, [
@@ -8,39 +10,163 @@ myLibrary.addBook(
   ])
 );
 
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 900, false, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 896, true, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 900, false, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 896, true, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 900, false, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 896, true, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 900, false, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 896, true, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+myLibrary.addBook(
+  new Book("Dune", "Frank Herbert", 900, false, [
+    "SciFi",
+    "Space",
+    "Political Drama",
+  ])
+);
+
+/* Main elements */
+const libraryGrid = document.querySelector(".library-grid");
+
+/* Window */
+window.addEventListener("load", displayBooks(myLibrary.getBooks()));
+window.addEventListener("click", (event) => {
+  if (event.target === addBookModal) {
+    hideModal();
+  } else if (!sortBtn.contains(event.target)) {
+    dropdownSort.classList.replace("show", "hidden");
+  }
+});
+
 /* Header elements */
 const searchInput = document.querySelector(".search > input");
+const sortBtn = document.querySelector(".sort");
 const addBtn = document.querySelector(".add");
 const clearBtn = document.querySelector(".clear");
+const dropdownSort = document.querySelector(".dropdown-sort");
+const dropdownSortAllBooks = document.querySelector(
+  ".dropdown-item:nth-child(1)"
+);
+const dropdownSortIsRead = document.querySelector(
+  ".dropdown-item:nth-child(2)"
+);
+const dropdownSortNotRead = document.querySelector(
+  ".dropdown-item:nth-child(3)"
+);
+const dropdownSortMostPages = document.querySelector(
+  ".dropdown-item:nth-child(4)"
+);
+const dropdownSortLeastPages = document.querySelector(
+  ".dropdown-item:nth-child(5)"
+);
+const dropdownSortRecentlyAdded = document.querySelector(
+  ".dropdown-item:nth-child(6)"
+);
+searchInput.addEventListener("input", (event) => {
+  displayBooks(filterBooks(event));
+});
+sortBtn.addEventListener("click", () => {
+  if (dropdownSort.classList.contains("hidden")) {
+    dropdownSort.classList.replace("hidden", "show");
+  } else {
+    dropdownSort.classList.replace("show", "hidden");
+  }
+});
+addBtn.addEventListener("click", showModal);
+clearBtn.addEventListener("click", () => {
+  myLibrary.removeAllBooks();
+  clearBooks();
+});
+dropdownSortAllBooks.addEventListener("click", () => {
+  displayBooks(myLibrary.getBooks());
+});
+dropdownSortIsRead.addEventListener("click", () => {
+  displayBooks(
+    [...myLibrary.getBooks()].sort((b, a) => a.getIsRead() - b.getIsRead())
+  );
+});
+dropdownSortNotRead.addEventListener("click", () => {
+  displayBooks(
+    [...myLibrary.getBooks()].sort((a, b) => a.getIsRead() - b.getIsRead())
+  );
+});
+dropdownSortLeastPages.addEventListener("click", () => {
+  displayBooks(
+    [...myLibrary.getBooks()].sort((b, a) => a.getPages() < b.getPages())
+  );
+});
+dropdownSortMostPages.addEventListener("click", () => {
+  displayBooks(
+    [...myLibrary.getBooks()].sort((b, a) => a.getPages() > b.getPages())
+  );
+});
+dropdownSortRecentlyAdded.addEventListener("click", () => {
+  displayBooks([...myLibrary.getBooks()].reverse());
+});
 
 /* Modal elements */
 const addBookModal = document.querySelector(".modal");
 const addBookModalConfirm = document.querySelector(".modal button");
 const closeBookModal = document.querySelector(".modal-content span");
 const form = document.querySelector("form");
-
-/* Main elements */
-const libraryGrid = document.querySelector(".library-grid");
-
-window.addEventListener("load", displayBooks(myLibrary.getBooks()));
-
-window.addEventListener("click", (event) => {
-  if (event.target == addBookModal) {
-    hideModal();
-  }
-});
-
-searchInput.addEventListener("input", filterBooks);
-
-addBtn.addEventListener("click", showModal);
-
-clearBtn.addEventListener("click", () => {
-  myLibrary.removeAllBooks();
-  clearBooks();
-});
-
 closeBookModal.addEventListener("click", hideModal);
-
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   addBookToLibrary();
@@ -50,6 +176,7 @@ form.addEventListener("submit", (event) => {
 
 function clearBooks() {
   libraryGrid.innerText = "";
+  myLibrary.length = 0;
 }
 
 function displayBooks(books) {
@@ -60,34 +187,38 @@ function displayBooks(books) {
 }
 
 function filterBooks(event) {
-  if (event.target.value === "") {
+  const searchQuery = event.target.value.toLowerCase();
+
+  // Display default library with no search input
+  if (searchQuery === "") {
     displayBooks(myLibrary.getBooks());
     return;
   }
 
-  const searchQuery = event.target.value.toLowerCase();
-  const books = [];
+  const filteredBooks = [];
 
   for (let i = 0; i < myLibrary.getBooks().length; i++) {
     let title = myLibrary.getBooks()[i].getTitle().toLowerCase();
     let author = myLibrary.getBooks()[i].getAuthor().toLowerCase();
-    let pages = myLibrary.getBooks()[i].getPages().toString().toLowerCase();
+    let pages = myLibrary.getBooks()[i].getPages().toString();
     let tags = myLibrary
       .getBooks()
       [i].getTags()
       .map((tag) => tag.toLowerCase());
 
+    // If search query shows in title, book, pages, or any tags,
+    // add it to array of books to be displayed
     if (
       title.includes(searchQuery) ||
       author.includes(searchQuery) ||
       pages.includes(searchQuery) ||
       tags.some((tag) => tag.includes(searchQuery))
     ) {
-      books.push(myLibrary.getBooks()[i]);
+      filteredBooks.push(myLibrary.getBooks()[i]);
     }
   }
 
-  displayBooks(books);
+  return filteredBooks;
 }
 
 function createBookMarkup(book) {
@@ -95,9 +226,20 @@ function createBookMarkup(book) {
   element.setAttribute("class", "book");
   element.setAttribute("data-id", book.getID());
 
-  const remove = document.createElement("span");
+  const remove = document.createElement("div");
+  const removeSvg = `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+    <title>Remove book</title>
+    <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z" />
+  </svg>`;
   remove.classList.add("book-remove");
-  remove.innerHTML = "&times;";
+  remove.classList.add("hidden");
+  remove.addEventListener("click", () => {
+    myLibrary.removeBook(book);
+    displayBooks(myLibrary.getBooks());
+  });
+  remove.innerHTML = removeSvg;
   element.appendChild(remove);
 
   const title = document.createElement("span");
@@ -119,14 +261,33 @@ function createBookMarkup(book) {
   isRead.classList.add("book-read");
 
   const svgBookOpen = `
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
     <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
     <title>You've read this book!</title>
-    <path d="M160 96a96 96 0 1 1 192 0A96 96 0 1 1 160 96zm80 152V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"/>
+    <path class="isRead" d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5V78.6c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8V454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5V83.8c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11V456c0 11.4 11.7 19.3 22.4 15.5z"/>
   </svg>`;
 
-  isRead.innerHTML = book.getIsRead() ? svgBookOpen : "";
+  const svgBookClosed = `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+    <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+    <title>You have not read this book.</title>
+    <path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+  </svg>`;
+
+  isRead.innerHTML = book.getIsRead() ? svgBookOpen : svgBookClosed;
+  isRead.addEventListener("click", () => {
+    book.setIsRead(!book.getIsRead());
+    isRead.innerHTML = book.getIsRead() ? svgBookOpen : svgBookClosed;
+  });
   element.appendChild(isRead);
+
+  element.addEventListener("mouseleave", () => {
+    remove.classList.add("hidden");
+  });
+
+  element.addEventListener("mouseover", () => {
+    remove.classList.remove("hidden");
+  });
 
   return element;
 }
