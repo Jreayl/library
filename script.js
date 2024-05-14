@@ -1,6 +1,4 @@
 const myLibrary = new Library();
-const myLibrarySorted = new Library();
-const myLibraryFiltered = new Library();
 
 myLibrary.addBook(
   new Book("Dune", "Frank Herbert", 896, true, [
@@ -11,74 +9,34 @@ myLibrary.addBook(
 );
 
 myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 900, false, [
-    "SciFi",
-    "Space",
-    "Political Drama",
+  new Book("To Kill a Mockingbird", "Harper Lee", 281, true, [
+    "Classic",
+    "Fiction",
+    "Legal Drama",
   ])
 );
 
 myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 896, true, [
-    "SciFi",
-    "Space",
-    "Political Drama",
+  new Book("The Great Gatsby", "F. Scott Fitzgerald", 180, false, [
+    "Classic",
+    "Fiction",
+    "Romance",
   ])
 );
 
 myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 900, false, [
-    "SciFi",
-    "Space",
-    "Political Drama",
+  new Book("The Hobbit", "J.R.R. Tolkien", 310, true, [
+    "Fantasy",
+    "Adventure",
+    "Middle-earth",
   ])
 );
 
 myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 896, true, [
-    "SciFi",
-    "Space",
-    "Political Drama",
-  ])
-);
-
-myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 900, false, [
-    "SciFi",
-    "Space",
-    "Political Drama",
-  ])
-);
-
-myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 896, true, [
-    "SciFi",
-    "Space",
-    "Political Drama",
-  ])
-);
-
-myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 900, false, [
-    "SciFi",
-    "Space",
-    "Political Drama",
-  ])
-);
-
-myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 896, true, [
-    "SciFi",
-    "Space",
-    "Political Drama",
-  ])
-);
-
-myLibrary.addBook(
-  new Book("Dune", "Frank Herbert", 900, false, [
-    "SciFi",
-    "Space",
-    "Political Drama",
+  new Book("Pride and Prejudice", "Jane Austen", 279, false, [
+    "Classic",
+    "Romance",
+    "Social Commentary",
   ])
 );
 
@@ -86,7 +44,9 @@ myLibrary.addBook(
 const libraryGrid = document.querySelector(".library-grid");
 
 /* Window */
-window.addEventListener("load", displayBooks(myLibrary.getBooks()));
+window.addEventListener("load", () => {
+  displayBooks(myLibrary.getBooks());
+});
 window.addEventListener("click", (event) => {
   if (event.target === addBookModal) {
     hideModal();
@@ -135,30 +95,32 @@ clearBtn.addEventListener("click", () => {
   clearBooks();
 });
 dropdownSortAllBooks.addEventListener("click", () => {
+  myLibrary.restoreBooks();
   displayBooks(myLibrary.getBooks());
 });
 dropdownSortIsRead.addEventListener("click", () => {
   displayBooks(
-    [...myLibrary.getBooks()].sort((b, a) => a.getIsRead() - b.getIsRead())
+    myLibrary.getBooks().sort((b, a) => a.getIsRead() - b.getIsRead())
   );
 });
 dropdownSortNotRead.addEventListener("click", () => {
   displayBooks(
-    [...myLibrary.getBooks()].sort((a, b) => a.getIsRead() - b.getIsRead())
+    myLibrary.getBooks().sort((a, b) => a.getIsRead() - b.getIsRead())
   );
 });
 dropdownSortLeastPages.addEventListener("click", () => {
   displayBooks(
-    [...myLibrary.getBooks()].sort((b, a) => a.getPages() < b.getPages())
+    myLibrary.getBooks().sort((b, a) => a.getPages() < b.getPages())
   );
 });
 dropdownSortMostPages.addEventListener("click", () => {
   displayBooks(
-    [...myLibrary.getBooks()].sort((b, a) => a.getPages() > b.getPages())
+    myLibrary.getBooks().sort((b, a) => a.getPages() > b.getPages())
   );
 });
 dropdownSortRecentlyAdded.addEventListener("click", () => {
-  displayBooks([...myLibrary.getBooks()].reverse());
+  const reversed = [...myLibrary.getBooks()];
+  displayBooks(reversed.reverse());
 });
 
 /* Modal elements */
@@ -191,8 +153,7 @@ function filterBooks(event) {
 
   // Display default library with no search input
   if (searchQuery === "") {
-    displayBooks(myLibrary.getBooks());
-    return;
+    return myLibrary.getBooks();
   }
 
   const filteredBooks = [];
@@ -208,6 +169,7 @@ function filterBooks(event) {
 
     // If search query shows in title, book, pages, or any tags,
     // add it to array of books to be displayed
+
     if (
       title.includes(searchQuery) ||
       author.includes(searchQuery) ||
