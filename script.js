@@ -119,8 +119,7 @@ dropdownSortMostPages.addEventListener("click", () => {
   );
 });
 dropdownSortRecentlyAdded.addEventListener("click", () => {
-  const reversed = [...myLibrary.getBooks()];
-  displayBooks(reversed.reverse());
+  displayBooks([...myLibrary.getPrevBooks()].reverse());
 });
 
 /* Modal elements */
@@ -169,7 +168,6 @@ function filterBooks(event) {
 
     // If search query shows in title, book, pages, or any tags,
     // add it to array of books to be displayed
-
     if (
       title.includes(searchQuery) ||
       author.includes(searchQuery) ||
@@ -255,11 +253,11 @@ function createBookMarkup(book) {
 }
 
 function hideModal() {
-  addBookModal.style.display = "none";
+  addBookModal.classList.replace("show", "hidden");
 }
 
 function showModal() {
-  addBookModal.style.display = "block";
+  addBookModal.classList.replace("hidden", "show");
 }
 
 function clearModal() {
