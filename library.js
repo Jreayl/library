@@ -24,7 +24,11 @@ class Library {
     this.books = books;
   }
 
-  restore() {
+  getPrevBooks() {
+    return this.prevBooks;
+  }
+
+  restoreBooks() {
     this.books = this.prevBooks;
   }
 
